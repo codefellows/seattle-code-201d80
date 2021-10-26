@@ -1,0 +1,16 @@
+body {
+  background-color: bisque;
+}
+
+h1 {
+  color: goldenrod;
+  margin: 50px;
+}
+
+#tips {
+  color: blue;
+}
+
+.info {
+  color: firebrick;
+}
