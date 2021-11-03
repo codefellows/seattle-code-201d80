@@ -1,0 +1,43 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+nav {
+  background-color: olivedrab;
+  height: 10rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.left-column {
+  background-color: salmon;
+  border: 5px solid black;
+  height: 10rem;
+  width: 20%;
+  display: inline-block;
+  margin-right: 5%;
+}
+
+.right-column {
+  background-color: cornflowerblue;
+  border: 5px solid black;
+  height: 10rem;
+  width: 74%;
+  display: inline-block;
+}
+
+.row {
+  width: 90%;
+  margin: 2rem auto;
+}
+main {
+  padding-top: 10rem;
+}
+
+.gold {
+  background-color: bisque;
+  padding: 1rem;
+  overflow: auto;
+  height: 10rem;
+}
