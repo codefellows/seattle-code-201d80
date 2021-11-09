@@ -42,7 +42,7 @@ function pickGoats() {
 
     do {
         Goat.right = getRandomGoat();
-    } while (Goat.right === Goat.left || Goat.right === oldRight || Goat.right === oldLeft )
+    } while (Goat.right === Goat.left || Goat.right === oldRight || Goat.right === oldLeft)
 }
 
 function renderGoats() {
@@ -101,7 +101,7 @@ function renderList() {
 
     const ulElem = document.getElementById('results-list');
 
-    for(let i=0; i < Goat.all.length; i++) {
+    for (let i = 0; i < Goat.all.length; i++) {
         const goat = Goat.all[i];
         const liElem = document.createElement('li');
         ulElem.appendChild(liElem);
@@ -110,18 +110,20 @@ function renderList() {
 
 
 }
-
+// NOTE: make sure ChartJS version loaded is the one you want
 function renderChart() {
 
     const goatNamesArray = [];
-    const goatLikesArray = [];
+    const goatVotesArray = [];
 
     for (let i = 0; i < Goat.all.length; i++) {
         const goat = Goat.all[i];
+
         const singleGoatName = goat.name;
         goatNamesArray.push(singleGoatName);
-        const singleGoatLikes = goat.votes;
-        goatLikesArray.push(singleGoatLikes);
+
+        const singleGoatVotes = goat.votes;
+        goatVotesArray.push(singleGoatVotes);
     }
 
     const ctx = document.getElementById('results-chart').getContext('2d');
@@ -133,10 +135,10 @@ function renderChart() {
         data: {
             labels: goatNamesArray,
             datasets: [{
-                label: 'Goat Likes',
+                label: 'Goat Votes',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
-                data: goatLikesArray
+                data: goatVotesArray
             }]
         },
 
