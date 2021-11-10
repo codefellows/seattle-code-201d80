@@ -1,5 +1,6 @@
 /* Globals */
 currentRound = 0;
+maxRound = 5;
 
 /* Constructors */
 function Goat(name, url) {
@@ -52,6 +53,33 @@ function renderGoats() {
 
 
 function populateGoats() {
+
+    // NEW: check if any goats in local storage
+    const storedGoatJSON = localStorage.getItem('goats');
+
+    if(storedGoatJSON) {
+        recreateStoredGoats(storedGoatJSON);
+    } else {
+        createNewGoats();
+    }
+
+
+}
+
+function recreateStoredGoats(json) { // NEW: populate Goat.all with info from local storage
+
+    const rawGoats = JSON.parse(json);
+
+    for(let i = 0; i < rawGoats.length; i += 1) {
+        const rawGoat = rawGoats[i];
+        const goatInstance = new Goat(rawGoat.name, rawGoat.url);
+        goatInstance.votes = rawGoat.votes;
+        goatInstance.shown = rawGoat.shown;
+    }
+    
+}
+
+function createNewGoats() {
     new Goat('cruisin', 'images/cruisin-goat.jpg');
     new Goat('float-your-goat', 'images/float-your-goat.jpg');
     new Goat('goat-away', 'images/goat-away.jpg');
@@ -75,26 +103,42 @@ function removeEventListeners() {
 function handleClick(event) {
 
     if (event.target.id === 'left-img') {
+
         Goat.left.votes += 1;
+    
     } else if (event.target.id === 'right-img') {
+    
         Goat.right.votes += 1;
+    
     } else {
+    
         alert('vote not counted');
         return;
     }
 
     currentRound += 1;
 
-    if (currentRound === 5) {
-        document.getElementById('results').hidden = false;
+    if (currentRound === maxRound) {
 
-        removeEventListeners();
-        renderChart();
-        renderList();
+        completeVoting();
+    
     } else {
+    
         pickGoats();
         renderGoats();
     }
+}
+
+function completeVoting() {
+
+    document.getElementById('results').hidden = false;
+
+    removeEventListeners();
+    renderChart();
+    renderList();
+
+    localStorage.setItem('goats', JSON.stringify(Goat.all));
+    
 }
 
 function renderList() {
@@ -107,14 +151,14 @@ function renderList() {
         ulElem.appendChild(liElem);
         liElem.textContent = `${goat.name} was voted on ${goat.votes} times and seen ${goat.shown} times.`;
     }
-
-
 }
+
 // NOTE: make sure ChartJS version loaded is the one you want
 function renderChart() {
 
     const goatNamesArray = [];
     const goatVotesArray = [];
+    const goatShownArray = []; // New: gather "shown" totals
 
     for (let i = 0; i < Goat.all.length; i++) {
         const goat = Goat.all[i];
@@ -124,12 +168,15 @@ function renderChart() {
 
         const singleGoatVotes = goat.votes;
         goatVotesArray.push(singleGoatVotes);
+
+        const singleGoatShown = goat.shown; // NEW: populate "shown" array
+        goatShownArray.push(singleGoatShown);
     }
 
     const ctx = document.getElementById('results-chart').getContext('2d');
     const goatChart = new Chart(ctx, {
         // The type of chart we want to create
-        type: 'bar',
+        type: 'horizontalBar', // NEW: change orientation
 
         // The data for our dataset
         data: {
@@ -139,15 +186,20 @@ function renderChart() {
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: goatVotesArray
+            },{
+                label: 'Goat Shown', // NEW: add dataset for "shown"
+                backgroundColor: 'rgb(99, 132, 132)',
+                borderColor: 'rgb(99, 132, 132)',
+                data: goatShownArray
             }]
         },
 
         // Configuration options go here
         options: {
             scales: {
-                yAxes: [{
+                xAxes: [{ // NEW: change to xAxes since now horizontal bar
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: true,
                     }
                 }]
             }
