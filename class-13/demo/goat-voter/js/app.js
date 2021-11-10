@@ -36,7 +36,6 @@ function pickGoats() {
     const oldLeft = Goat.left;
     const oldRight = Goat.right;
 
-
     do {
         Goat.left = getRandomGoat();
     } while (Goat.left === oldLeft || Goat.left === oldRight);
@@ -62,8 +61,6 @@ function populateGoats() {
     } else {
         createNewGoats();
     }
-
-
 }
 
 function recreateStoredGoats(json) { // NEW: populate Goat.all with info from local storage
@@ -75,8 +72,7 @@ function recreateStoredGoats(json) { // NEW: populate Goat.all with info from lo
         const goatInstance = new Goat(rawGoat.name, rawGoat.url);
         goatInstance.votes = rawGoat.votes;
         goatInstance.shown = rawGoat.shown;
-    }
-    
+    }  
 }
 
 function createNewGoats() {
@@ -137,7 +133,7 @@ function completeVoting() {
     renderChart();
     renderList();
 
-    localStorage.setItem('goats', JSON.stringify(Goat.all));
+    localStorage.setItem('goats', JSON.stringify(Goat.all)); // NEW: save goats in local storage
     
 }
 
@@ -217,5 +213,5 @@ function start() {
 }
 
 
-/* start */
+/* entry point */
 start();
